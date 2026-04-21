@@ -14,12 +14,6 @@
       <div class="cp">
         <button id="addBtn">Add</button>
         <div class="note">
-          <!-- <input
-            type="text"
-            name="inputItem"
-            id="inputItem"
-            placeholder="title"
-          /> -->
           <textarea
             name="inputItem"
             id="inputItem"
@@ -44,13 +38,7 @@
     const inputItem = document.querySelector("#inputItem");
     const addBtn = document.querySelector("#addBtn");
 
-    // addBtn.addEventListener("click", () => {
-    //   const item = document.createElement("li");
-
-    //   item.innerHTML = `${inputItem.value} <button class="removeItemBtn">❌</button>`;
-    //   itemUL.appendChild(item);
-    //   inputItem.value = "";
-    // });
+   
     addBtn.addEventListener("click", addItem);
     inputItem.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
@@ -58,13 +46,6 @@
         addItem();
       }
     });
-
-    // itemUL.addEventListener("click", (e) => {
-    //   const btn = e.target.closest(".removeItemBtn");
-    //   if (!btn) return;
-
-    //   btn.parentElement.remove();
-    // });
     itemUL.addEventListener("click", removeItem);
     itemUL.addEventListener("dblclick", editItem);
     itemUL.addEventListener("keydown", saveItem);
