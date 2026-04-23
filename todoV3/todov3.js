@@ -124,6 +124,8 @@ function editToDo(e) {
   if (e.target.classList.contains("edit-btn")) {
     const li = e.target.closest("li");
     const text = li.querySelector(".todo-text");
+
+    text.dataset.oldValue = text.textContent; // store old value
     text.contentEditable = "true";
     text.focus();
   }
@@ -134,6 +136,10 @@ function saveAfterEdit(e) {
   }
   if (e.target.classList.contains("todo-text") && e.key === "Enter") {
     e.preventDefault();
+    e.target.contentEditable = "false";
+  }
+  if (e.key === "Escape") {
+    e.target.textContent = e.target.dataset.oldValue;
     e.target.contentEditable = "false";
   }
 }
