@@ -20,7 +20,9 @@
         margin-top: 10px;
       }
       header {
-        margin-top: 100px;
+        margin-top: 50px;
+        margin-bottom: 100px;
+
         display: flex;
         justify-content: center;
         gap: 20px;
@@ -47,9 +49,15 @@
         background-color: green;
       }
       main {
-        width: 100%;
+        width: 70%;
         min-height: 70vh;
         border: 1px solid;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-self: center;
+        margin-bottom: 100px;
+        gap: 20px;
       }
       main h3 {
         text-align: center;
@@ -73,7 +81,10 @@
         /* border: 1px solid; */
         /* border-radius: 10px; */
         display: flex;
+        align-items: center;
         justify-content: space-between;
+        flex-direction: row;
+        gap: 20px;
       }
       .card ul li .tdStatus {
         width: 20px;
@@ -99,6 +110,16 @@
         text-decoration: line-through;
         opacity: 0.6;
       }
+      .todo-text {
+        flex: 1;
+      }
+
+      main img {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        /* margin: 10px; */
+      }
     </style>
   </head>
   <body>
@@ -118,10 +139,17 @@
       <div class="card">
         <ul>
           <li class="tdItem" id="todoItem">
-            create my own todo app
-            <span
-              ><input type="checkbox" name="status" class="tdStatus"
-            /></span>
+            <span class="todo-text">create my own todo app</span>
+
+            <div class="b">
+              <span
+                ><input type="checkbox" name="status" class="tdStatus" />
+              </span>
+
+              <span> <img src="./deletev2.png" alt="delete" /></span>
+
+              <span> <img src="./edit.png" alt="edit" /></span>
+            </div>
           </li>
         </ul>
       </div>
@@ -143,18 +171,34 @@
     addBtn.addEventListener("click", addNewToDo);
 
     inputData.addEventListener("keydown", function (e) {
-      if (!inputData.value) {
-        alert("Please enter a task before adding.");
-        return;
-      }
+      //   if (!inputData.value) {
+      //     alert("Please enter a task before adding.");
+      //     return;
+      //   }
       if (e.key == "Enter") {
         addNewToDo();
       }
     });
     function addNewToDo() {
+      const value = inputData.value.trim();
+
+      if (!value) {
+        alert("Please enter a task before adding.");
+        return;
+      }
       const newLi = document.createElement("li");
       newLi.classList.add("tdItem");
-      newLi.innerHTML = `${inputData.value} <span><input type="checkbox" name="status" class="tdStatus"/></span>`;
+      newLi.innerHTML = `<span class="todo-text">${inputData.value}</span> 
+
+    
+        <div class="b">
+  <span>
+            <input type="checkbox" name="status" class="tdStatus"/>
+     </span>  
+              <span> <img src="./deletev2.png" alt="delete" /></span>
+
+              <span> <img src="./edit.png" alt="edit" /></span>
+        </div>`;
       ul.appendChild(newLi);
     }
 
@@ -172,8 +216,9 @@
     ul.addEventListener("change", function (e) {
       if (e.target.classList.contains("tdStatus")) {
         const li = e.target.closest("li");
+        const todoText = li.querySelector(".todo-text");
 
-        li.classList.toggle("done", e.target.checked);
+        todoText.classList.toggle("done", e.target.checked);
       }
     });
     // li.classList.toggle("done", e.target.checked);
