@@ -138,7 +138,7 @@
       <!-- <h3>Notes section</h3> -->
       <div class="card">
         <ul>
-          <li class="tdItem" id="todoItem">
+          <li class="tdItem">
             <span class="todo-text">create my own todo app</span>
 
             <div class="b">
@@ -146,9 +146,11 @@
                 ><input type="checkbox" name="status" class="tdStatus" />
               </span>
 
-              <span> <img src="./deletev2.png" alt="delete" /></span>
+              <span>
+                <img src="./deletev2.png" alt="delete" class="delete-btn"
+              /></span>
 
-              <span> <img src="./edit.png" alt="edit" /></span>
+              <span> <img src="./edit.png" alt="edit" class="edit-btn" /></span>
             </div>
           </li>
         </ul>
@@ -157,7 +159,6 @@
   </body>
   <script>
     const ul = document.querySelector("ul");
-    const li = document.querySelector("li");
     const addBtn = document.querySelector(".AddBtn");
     const inputData = document.querySelector(".inputItem");
     // const status = document.querySelector(".tdStatus");
@@ -170,37 +171,32 @@
     // });
     addBtn.addEventListener("click", addNewToDo);
 
-    inputData.addEventListener("keydown", function (e) {
-      //   if (!inputData.value) {
-      //     alert("Please enter a task before adding.");
-      //     return;
-      //   }
-      if (e.key == "Enter") {
-        addNewToDo();
-      }
-    });
-    function addNewToDo() {
-      const value = inputData.value.trim();
+    inputData.addEventListener("keydown", addNewToDOWithEnter);
 
-      if (!value) {
-        alert("Please enter a task before adding.");
-        return;
-      }
-      const newLi = document.createElement("li");
-      newLi.classList.add("tdItem");
-      newLi.innerHTML = `<span class="todo-text">${inputData.value}</span> 
+    //     function addNewToDo() {
+    //       const value = inputData.value.trim();
 
-    
-        <div class="b">
-  <span>
-            <input type="checkbox" name="status" class="tdStatus"/>
-     </span>  
-              <span> <img src="./deletev2.png" alt="delete" /></span>
+    //       if (!value) {
+    //         alert("Please enter a task before adding.");
+    //         return;
+    //       }
+    //       const newLi = document.createElement("li");
+    //       newLi.classList.add("tdItem");
+    //       newLi.innerHTML = `<span class="todo-text">${value}</span>
 
-              <span> <img src="./edit.png" alt="edit" /></span>
-        </div>`;
-      ul.appendChild(newLi);
-    }
+    //         <div class="b">
+    //   <span>
+    //             <input type="checkbox" name="status" class="tdStatus"/>
+    //      </span>
+    //               <span> <img src="./deletev2.png" alt="delete" /></span>
+
+    //               <span> <img src="./edit.png" alt="edit" /></span>
+    //         </div>`;
+
+    //       ul.appendChild(newLi);
+    //       inputData.value = "";
+    //     }
+    // this above function is older one
 
     // ul.addEventListener("change", function (e) {
     //   if (e.target.classList.contains("tdStatus")) {
@@ -213,14 +209,90 @@
     //     }
     //   }
     // });
-    ul.addEventListener("change", function (e) {
+
+    ul.addEventListener("change", toggleToDoStatus);
+    ul.addEventListener("click", deleteToDo);
+    ul.addEventListener("click", editToDo);
+    ul.addEventListener("keydown", saveAfterEdit);
+
+    function addNewToDo() {
+      const value = inputData.value.trim();
+
+      if (!value) {
+        alert("Please enter a task before adding.");
+        return;
+      }
+
+      const li = document.createElement("li");
+      li.classList.add("tdItem");
+
+      const textspan = document.createElement("span");
+      textspan.classList.add("todo-text");
+      textspan.textContent = value;
+
+      const btnDiv = document.createElement("div");
+      btnDiv.classList.add("b");
+
+      const checkBox = document.createElement("input");
+      checkBox.type = "checkbox";
+      checkBox.classList.add("tdStatus");
+
+      const checkBoxSpan = document.createElement("span");
+      checkBoxSpan.appendChild(checkBox);
+
+      const deleteBtn = document.createElement("img");
+      deleteBtn.classList.add("delete-btn");
+      deleteBtn.src = "./deletev2.png";
+      deleteBtn.alt = "delete";
+
+      const deleteBtnSpan = document.createElement("span");
+      deleteBtnSpan.appendChild(deleteBtn);
+
+      const editBtn = document.createElement("img");
+      editBtn.classList.add("edit-btn");
+      editBtn.src = "./edit.png";
+      editBtn.alt = "edit";
+      const editBtnSpan = document.createElement("span");
+      editBtnSpan.appendChild(editBtn);
+
+      btnDiv.append(checkBoxSpan, deleteBtnSpan, editBtnSpan);
+      li.append(textspan, btnDiv);
+      ul.appendChild(li);
+      inputData.value = "";
+      inputData.focus();
+    }
+    function addNewToDOWithEnter(e) {
+      if (e.key === "Enter") {
+        addNewToDo();
+      }
+    }
+    function toggleToDoStatus(e) {
       if (e.target.classList.contains("tdStatus")) {
         const li = e.target.closest("li");
         const todoText = li.querySelector(".todo-text");
 
         todoText.classList.toggle("done", e.target.checked);
       }
-    });
-    // li.classList.toggle("done", e.target.checked);
+    }
+    function deleteToDo(e) {
+      if (e.target.classList.contains("delete-btn")) {
+        const li = e.target.closest("li");
+        li.remove();
+      }
+    }
+    function editToDo(e) {
+      if (e.target.classList.contains("edit-btn")) {
+        const li = e.target.closest("li");
+        const text = li.querySelector(".todo-text");
+        text.contentEditable = "true";
+        text.focus();
+      }
+    }
+    function saveAfterEdit(e) {
+      if (e.target.classList.contains("todo-text") && e.key === "Enter") {
+        e.preventDefault();
+        e.target.contentEditable = "false";
+      }
+    }
   </script>
 </html>
