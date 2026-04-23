@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doc</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: cursive;
+      }
+      body {
+        background-color: #121212;
+        color: #fff;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 10px;
+      }
+      header {
+        margin-top: 100px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        /* border: 1px solid; */
+      }
+      header input {
+        border-radius: 10px;
+        padding: 10px;
+      }
+      header input::placeholder {
+        color: rgba(81, 91, 93, 0.604);
+      }
+      header input:focus {
+        /* border-color: blue; */
+        border: 2px solid rgba(45, 5, 224, 0.8);
+        outline: none;
+      }
+      header button {
+        display: inline-block;
+        width: 4em;
+        text-align: center;
+        padding: 10px;
+        border-radius: 20%;
+        background-color: green;
+      }
+      main {
+        width: 100%;
+        min-height: 70vh;
+        border: 1px solid;
+      }
+      main h3 {
+        text-align: center;
+      }
+      .card {
+        width: 60%;
+        margin: 20px;
+        padding: 20px;
+        border: 1px solid;
+        border-radius: 10px;
+        position: relative;
+      }
+      .card ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .card ul li {
+        padding: 10px;
+        /* border: 1px solid; */
+        /* border-radius: 10px; */
+        display: flex;
+        justify-content: space-between;
+      }
+      .card ul li .tdStatus {
+        width: 20px;
+        height: 20px;
+      }
+      .tdStatus:checked {
+        accent-color: green;
+      }
+      /* .tdStatus {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid white;
+        border-radius: 50%;
+        cursor: pointer;
+      } */
+      /* this is for custom checkbox design . */
+
+      .tdStatus:checked {
+        background-color: green;
+      }
+      .done {
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>MY TODO APP</h1>
+    <header>
+      <!-- <label for="inputItem">todo</label> -->
+      <button class="AddBtn">Add</button>
+      <input
+        type="text"
+        id="inputItem"
+        class="inputItem"
+        placeholder="to day's plan "
+      />
+    </header>
+    <main>
+      <!-- <h3>Notes section</h3> -->
+      <div class="card">
+        <ul>
+          <li class="tdItem" id="todoItem">
+            create my own todo app
+            <span
+              ><input type="checkbox" name="status" class="tdStatus"
+            /></span>
+          </li>
+        </ul>
+      </div>
+    </main>
+  </body>
+  <script>
+    const ul = document.querySelector("ul");
+    const li = document.querySelector("li");
+    const addBtn = document.querySelector(".AddBtn");
+    const inputData = document.querySelector(".inputItem");
+    // const status = document.querySelector(".tdStatus");
+
+    // addBtn.addEventListener("click", function () {
+    //   const newLi = document.createElement("li");
+    //   newLi.classList.add("tdItem");
+    //   newLi.innerHTML = `${inputData.value} <span><input type="checkbox" name="status" class="tdStatus"/></span>`;
+    //   ul.appendChild(newLi);
+    // });
+    addBtn.addEventListener("click", addNewToDo);
+
+    inputData.addEventListener("keydown", function (e) {
+      if (!inputData.value) {
+        alert("Please enter a task before adding.");
+        return;
+      }
+      if (e.key == "Enter") {
+        addNewToDo();
+      }
+    });
+    function addNewToDo() {
+      const newLi = document.createElement("li");
+      newLi.classList.add("tdItem");
+      newLi.innerHTML = `${inputData.value} <span><input type="checkbox" name="status" class="tdStatus"/></span>`;
+      ul.appendChild(newLi);
+    }
+
+    // ul.addEventListener("change", function (e) {
+    //   if (e.target.classList.contains("tdStatus")) {
+    //     const li = e.target.closest("li");
+
+    //     if (e.target.checked) {
+    //       li.style.textDecoration = "line-through";
+    //     } else {
+    //       li.style.textDecoration = "none";
+    //     }
+    //   }
+    // });
+    ul.addEventListener("change", function (e) {
+      if (e.target.classList.contains("tdStatus")) {
+        const li = e.target.closest("li");
+
+        li.classList.toggle("done", e.target.checked);
+      }
+    });
+    // li.classList.toggle("done", e.target.checked);
+  </script>
+</html>
