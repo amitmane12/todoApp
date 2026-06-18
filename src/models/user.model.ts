@@ -7,7 +7,9 @@ import {
   HydratedDocumentFromSchema,
 } from 'mongoose';
 import bcrypt from 'bcrypt';
-
+import jwt from 'jsonwebtoken';
+import type { StringValue } from 'ms';
+import { JWTconfig } from '../config/config';
 const userSchema = new Schema(
   {
     firstName: {
@@ -28,6 +30,7 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
+      index: true,
     },
     password: {
       type: String,
@@ -43,6 +46,15 @@ const userSchema = new Schema(
       type: String,
 
       //   default: 'default-profile-picture.png',
+    },
+    wathcedTodos: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Vedio',
+      },
+    ],
+    refreshToken: {
+      type: String,
     },
   },
   { timestamps: true }
@@ -67,6 +79,46 @@ userSchema.pre('save', async function (this: UserDocument) {
     throw error;
   }
 });
+
+userSchema.methods.isPasswordCorrect = async function (password: any) {
+  return await bcrypt.compare(password, this.password);
+};
+
+userSchema.methods.generateAccessToken = function (): string {
+  // const secret = process.env.ACCESS_TOKEN_SECRET;
+  // const secretExpiry = process.env.ACCESS_TOKEN_EXPIRY as StringValue;
+  // if (!secret) {
+  //   throw new Error('ACCESS_TOKEN_SECRET is not defined');
+  // }
+  // if (!secretExpiry) {
+  //   throw new Error('ACCESS_TOKEN_EXPIRY is not defined');
+  // }
+
+  return jwt.sign(
+    {
+      _id: this._id,
+      email: this.email,
+      firstName: this.firstName,
+      lastName: this.lastName,
+    },
+    JWTconfig.accessTokenSecret,
+    {
+      expiresIn: JWTconfig.accessTokenExpiry,
+    }
+  );
+};
+userSchema.methods.generateRefreshToken = async function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      email: this.email,
+    },
+    JWTconfig.refreshToken,
+    {
+      expiresIn: JWTconfig.refreshTokenExpiry,
+    }
+  );
+};
 
 // --------------------------------------------
 //diff (older) approach
