@@ -1,2 +1,10 @@
-# todoApp
-this app is for brush up html css js basis
+# App
+Stack used here are
+ - nodeJs (typescript)
+ - express (framework)
+ - mongodb atlas (database)
+ - cloudinary
+ - multer
+ - jwt
+ - bcrypt
+ 
